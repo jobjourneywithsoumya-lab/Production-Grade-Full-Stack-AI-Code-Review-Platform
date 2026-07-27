@@ -7,8 +7,6 @@ from app.services.auth_service import AuthService
 
 router = APIRouter()
 
-auth_service = AuthService()
-
 
 @router.post(
     "/auth/register",
@@ -19,11 +17,10 @@ def register(
     user: UserCreate,
     db: Session = Depends(get_db),
 ):
+    auth_service = AuthService(db)
+
     try:
-        return auth_service.register_user(
-            db,
-            user,
-        )
+        return auth_service.register_user(user)
 
     except ValueError as e:
         raise HTTPException(

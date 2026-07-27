@@ -1,36 +1,55 @@
-from sqlalchemy.orm import Session
-
-from app.models.user import User
 from app.repositories.user_repository import UserRepository
-from app.schemas.user import UserCreate
-from app.security.hashing import hash_password
+from app.schemas.user import UserCreate, UserResponse
+from app.schemas.token import Token
+from app.security.hashing import hash_password, verify_password
+from app.security.jwt import create_access_token
 
 
 class AuthService:
+    def __init__(self, db):
+        self.user_repository = UserRepository(db)
 
-    def __init__(self):
-        self.user_repository = UserRepository()
-
-    def register_user(
-        self,
-        db: Session,
-        user_data: UserCreate,
-    ):
-        existing_user = self.user_repository.get_by_email(
-            db,
-            user_data.email,
-        )
+    def register(self, user: UserCreate) -> UserResponse:
+        existing_user = self.user_repository.get_by_email(user.email)
 
         if existing_user:
             raise ValueError("Email already registered")
 
-        user = User(
-            username=user_data.username,
-            email=user_data.email,
-            hashed_password=hash_password(user_data.password),
+        hashed_password = hash_password(user.password)
+
+        new_user = self.user_repository.create_user(
+            name=user.name,
+            email=user.email,
+            hashed_password=hashed_password,
         )
 
-        return self.user_repository.create(
-            db,
-            user,
+        return UserResponse(
+            id=new_user.id,
+            name=new_user.name,
+            email=new_user.email,
+        )
+
+    def login(
+        self,
+        email: str,
+        password: str,
+    ) -> Token:
+
+        user = self.user_repository.get_by_email(email)
+
+        if user is None:
+            raise ValueError("Invalid email or password")
+
+        if not verify_password(password, user.hashed_password):
+            raise ValueError("Invalid email or password")
+
+        access_token = create_access_token(
+            data={
+                "sub": user.email,
+            }
+        )
+
+        return Token(
+            access_token=access_token,
+            token_type="bearer",
         )
