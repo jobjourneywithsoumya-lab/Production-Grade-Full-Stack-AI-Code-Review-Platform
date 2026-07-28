@@ -1,8 +1,13 @@
 from fastapi import APIRouter
 
-from app.core.config import settings
-from app.schemas.health import HealthResponse
-from app.schemas.response import APIResponse
+try:
+    from app.core.config import settings
+    from app.schemas.health import HealthResponse
+    from app.schemas.response import APIResponse
+except ModuleNotFoundError:  # pragma: no cover - supports repo-root execution
+    from gateway.app.core.config import settings
+    from gateway.app.schemas.health import HealthResponse
+    from gateway.app.schemas.response import APIResponse
 
 router = APIRouter(tags=["Gateway"])
 

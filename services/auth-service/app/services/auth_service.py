@@ -27,6 +27,7 @@ class AuthService:
             id=new_user.id,
             name=new_user.name,
             email=new_user.email,
+            created_at=new_user.created_at,
         )
 
     def login(self, email: str, password: str) -> Token:
@@ -36,7 +37,8 @@ class AuthService:
         if user is None:
             raise ValueError("Invalid email or password")
 
-        if not verify_password(password, user.hashed_password):
+        # model stores hashed password in `password_hash`
+        if not verify_password(password, user.password_hash):
             raise ValueError("Invalid email or password")
 
         access_token = create_access_token(

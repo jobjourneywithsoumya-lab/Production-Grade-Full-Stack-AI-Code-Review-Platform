@@ -1,17 +1,26 @@
-def create_user(
-    self,
-    name: str,
-    email: str,
-    hashed_password: str
-):
-    user = User(
-        name=name,
-        email=email,
-        hashed_password=hashed_password
-    )
+from typing import Optional
 
-    self.db.add(user)
-    self.db.commit()
-    self.db.refresh(user)
+from sqlalchemy.orm import Session
 
-    return user
+from app.models.user import User
+
+
+class UserRepository:
+    def __init__(self, db: Session):
+        self.db = db
+
+    def get_by_email(self, email: str) -> Optional[User]:
+        return self.db.query(User).filter(User.email == email).first()
+
+    def create_user(self, name: str, email: str, hashed_password: str) -> User:
+        user = User(
+            name=name,
+            email=email,
+            password_hash=hashed_password,
+        )
+
+        self.db.add(user)
+        self.db.commit()
+        self.db.refresh(user)
+
+        return user
