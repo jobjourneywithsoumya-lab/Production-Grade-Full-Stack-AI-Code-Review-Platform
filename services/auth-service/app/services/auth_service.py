@@ -29,11 +29,7 @@ class AuthService:
             email=new_user.email,
         )
 
-    def login(
-        self,
-        email: str,
-        password: str,
-    ) -> Token:
+    def login(self, email: str, password: str) -> Token:
 
         user = self.user_repository.get_by_email(email)
 
@@ -44,9 +40,7 @@ class AuthService:
             raise ValueError("Invalid email or password")
 
         access_token = create_access_token(
-            data={
-                "sub": user.email,
-            }
+            {"sub": user.email}
         )
 
         return Token(
