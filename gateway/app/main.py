@@ -1,15 +1,10 @@
 from fastapi import FastAPI
 
-try:
-    from app.api.v1.routes import router
-    from app.core.config import settings
-    from app.middleware.cors import register_cors
-    from app.middleware.request_id import RequestIDMiddleware
-except ModuleNotFoundError:  # pragma: no cover - supports repo-root execution
-    from gateway.app.api.v1.routes import router
-    from gateway.app.core.config import settings
-    from gateway.app.middleware.cors import register_cors
-    from gateway.app.middleware.request_id import RequestIDMiddleware
+
+from app.api.v1.routes import router
+from app.core.config import settings
+from app.middleware.cors import register_cors
+from app.middleware.request_id import RequestIDMiddleware
 
 
 app = FastAPI(

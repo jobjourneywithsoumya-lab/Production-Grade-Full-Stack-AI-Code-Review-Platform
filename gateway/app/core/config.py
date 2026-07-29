@@ -20,6 +20,20 @@ class Settings(BaseSettings):
     DEBUG: bool = True
 
     # ==========================
+    # Database
+    # ==========================
+    DATABASE_URL: str = (
+        "postgresql+psycopg2://postgres:password@localhost:5432/ai_code_review"
+    )
+
+    # ==========================
+    # JWT
+    # ==========================
+    SECRET_KEY: str = "change-this-to-a-strong-secret-key"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+
+    # ==========================
     # Microservices
     # ==========================
     AUTH_SERVICE: str = "http://localhost:8001"
