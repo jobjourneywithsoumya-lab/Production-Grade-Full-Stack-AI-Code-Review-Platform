@@ -37,8 +37,8 @@ class AuthService:
         if user is None:
             raise ValueError("Invalid email or password")
 
-        # model stores hashed password in `password_hash`
-        if not verify_password(password, user.password_hash):
+        # model stores hashed password in `hashed_password`
+        if not verify_password(password, user.hashed_password):
             raise ValueError("Invalid email or password")
 
         access_token = create_access_token(

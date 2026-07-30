@@ -16,7 +16,7 @@ class UserRepository:
         user = User(
             name=name,
             email=email,
-            password_hash=hashed_password,
+            hashed_password=hashed_password,
         )
 
         self.db.add(user)

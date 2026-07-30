@@ -27,7 +27,8 @@ class User(Base):
         index=True,
     )
 
-    password_hash: Mapped[str] = mapped_column(
+    # Keep this name consistent everywhere
+    hashed_password: Mapped[str] = mapped_column(
         String(255),
         nullable=False,
     )
