@@ -1,9 +1,6 @@
 from fastapi import APIRouter
 
-from app.schemas.ai import (
-    AnalyzeRequest,
-    AnalyzeResponse,
-)
+from app.schemas.ai import AnalyzeRequest, AnalyzeResponse
 from app.services.ollama_service import OllamaService
 
 router = APIRouter()

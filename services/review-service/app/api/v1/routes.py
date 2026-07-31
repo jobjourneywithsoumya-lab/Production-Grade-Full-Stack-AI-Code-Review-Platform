@@ -19,7 +19,4 @@ def create_review(
 ):
     service = ReviewService(db)
 
-    return service.save_review(
-        repository_id=request.repository_id,
-        review=request.code,
-    )
+    return service.review_code(request)

@@ -14,19 +14,19 @@ class OllamaService:
         prompt = f"""
 You are an expert software engineer.
 
-Review the following {request.language} code.
-
-Filename:
-{request.filename}
+Review the following Python code.
 
 Code:
+
 {request.code}
 
 Provide:
+
 1. Summary
 2. Bugs
 3. Improvements
 4. Best Practices
+5. Corrected Code
 """
 
         response = httpx.post(
