@@ -1,18 +1,17 @@
-from app.schemas.review import (
-    ReviewRequest,
-    ReviewResponse,
-)
+from app.repositories.review_repository import ReviewRepository
 
 
 class ReviewService:
 
-    def review_code(
-        self,
-        request: ReviewRequest,
-    ) -> ReviewResponse:
+    def __init__(self, db):
+        self.repository = ReviewRepository(db)
 
-        return ReviewResponse(
-            summary="AI review not connected yet.",
-            issues=[],
-            suggestions=[],
+    def save_review(
+        self,
+        repository_id: int,
+        review: str,
+    ):
+        return self.repository.create_review(
+            repository_id,
+            review,
         )

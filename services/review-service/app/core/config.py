@@ -6,6 +6,8 @@ class Settings(BaseSettings):
     HOST: str
     PORT: int
 
+    DATABASE_URL: str
+
     AI_SERVICE: str
 
     model_config = SettingsConfigDict(

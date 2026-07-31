@@ -1,13 +1,15 @@
 from pydantic import BaseModel
 
 
-class ReviewRequest(BaseModel):
-    filename: str
-    language: str
+class ReviewCreate(BaseModel):
+    repository_id: int
     code: str
 
 
 class ReviewResponse(BaseModel):
-    summary: str
-    issues: list[str]
-    suggestions: list[str]
+    id: int
+    repository_id: int
+    review: str
+
+    class Config:
+        from_attributes = True
