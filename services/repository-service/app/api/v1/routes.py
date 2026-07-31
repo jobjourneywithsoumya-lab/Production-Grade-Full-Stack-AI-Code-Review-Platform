@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.dependencies.database import get_db
@@ -19,6 +19,17 @@ def root():
     }
 
 
+@router.get(
+    "/repositories",
+    response_model=list[RepositoryResponse],
+)
+def get_repositories(
+    db: Session = Depends(get_db),
+):
+    service = RepositoryService(db)
+    return service.get_repositories()
+
+
 @router.post(
     "/repositories",
     response_model=RepositoryResponse,
@@ -29,26 +40,7 @@ def create_repository(
     db: Session = Depends(get_db),
 ):
     service = RepositoryService(db)
-
-    try:
-        return service.create(repository)
-
-    except ValueError as e:
-        raise HTTPException(
-            status_code=400,
-            detail=str(e),
-        )
-
-
-@router.get(
-    "/repositories",
-    response_model=list[RepositoryResponse],
-)
-def get_repositories(
-    db: Session = Depends(get_db),
-):
-    service = RepositoryService(db)
-    return service.get_all()
+    return service.create_repository(repository)
 
 
 @router.get(
@@ -60,12 +52,4 @@ def get_repository(
     db: Session = Depends(get_db),
 ):
     service = RepositoryService(db)
-
-    try:
-        return service.get_by_id(repo_id)
-
-    except ValueError as e:
-        raise HTTPException(
-            status_code=404,
-            detail=str(e),
-        )
+    return service.get_repository(repo_id)

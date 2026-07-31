@@ -1,16 +1,15 @@
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 
 
 class RepositoryCreate(BaseModel):
     name: str
-    url: HttpUrl
+    url: str
 
 
 class RepositoryResponse(BaseModel):
     id: int
     name: str
-    url: HttpUrl
+    url: str
 
-    model_config = {
-        "from_attributes": True
-    }
+    class Config:
+        from_attributes = True
